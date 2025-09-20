@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Struk Transaksi</title>
+  <style>
+    @page { size: 58mm auto; margin: 0; }
+    body {
+      font-family: Arial, sans-serif;
+      font-size: 12px;
+      margin: 0;
+      padding: 0;
+    }
+    .content { padding: 5px; }
+    hr { border: 0; border-top: 1px dashed #000; margin: 5px 0; }
+  </style>
+</head>
+<body>
+  <div class="content">
+    <img src="<<[LogoUsaha]>>" alt="Logo Usaha" width="50" />
+    <h3><<<[NamaUsaha]>>></h3>
+    <p><<<[AlamatUsaha]>></p>
+    <hr>
+
+    <p>Tanggal : <<[Tanggal]>></p>
+    <p>Kasir   : <<[Nama Pelanggan]>></p>
+    <p>Metode  : <<[Metode Pembayaran]>></p>
+    <hr>
+
+    <p><<<[RincianCetak]>></p>
+    <hr>
+
+    <p>TOTAL     : <<[Total Tagihan]>></p>
+    <p>DIBAYAR   : <<[Total Pembayaran]>></p>
+    <p>KEMBALIAN : <<[Kembalian]>></p>
+    <hr>
+
+    <p><<<[CatatanPenjualan]>></p>
+  </div>
+</body>
+</html>
