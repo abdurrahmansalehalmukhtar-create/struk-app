@@ -7,21 +7,21 @@
     @page { size: 58mm auto; margin: 0; }
     body {
       font-family: Arial, sans-serif;
-      font-size: 10px; /* default font untuk semua */
+      font-size: 10px;
       margin: 0;
       padding: 0;
       background: #fff;
     }
     .content {
-      width: 100%;           /* ubah dari max-width ke width */
+      width: 100%;       /* diperbaiki supaya mengikuti lebar struk printer */
+      padding: 2px 3px;  /* dikurangi supaya teks kiri-kanan tidak kepotong */
       margin: 0 auto;
-      padding: 2px 3px;      /* padding kiri-kanan lebih kecil */
       background: #fff;
-      /* box-shadow: 0 0 10px #eee; */ /* optional, bisa dihapus */
+      /* box-shadow bisa tetap atau dihapus */
     }
     hr { border: 0; border-top: 1px dashed #000; margin: 3px 0; }
     .logo { display: block; margin: 0 auto 5px auto; }
-    h3#NamaUsaha { /* khusus Nama Usaha */
+    h3#NamaUsaha {
       text-align: center;
       font-size: 12px;
       margin: 2px 0;
@@ -29,7 +29,6 @@
     }
     h3, p { text-align: center; margin: 2px 0; }
     .left { text-align: left; }
-    /* Agar pre dan span juga ikut font 10px */
     pre, span, p, .left { 
       font-size: 10px; 
       white-space: pre-wrap;  /* teks panjang otomatis pindah baris */
@@ -71,3 +70,4 @@
   </script>
 </body>
 </html>
+
