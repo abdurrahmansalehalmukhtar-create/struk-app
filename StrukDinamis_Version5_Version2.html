@@ -7,15 +7,30 @@
     @page { size: 58mm auto; margin: 0; }
     body {
       font-family: Arial, sans-serif;
-      font-size: 12px;
+      font-size: 10px; /* default font untuk semua */
       margin: 0;
       padding: 0;
+      background: #fff;
     }
-    .content { padding: 5px; }
+    .content {
+      max-width: 58mm;
+      margin: 0 auto;
+      padding: 5px;
+      background: #fff;
+      box-shadow: 0 0 10px #eee;
+    }
     hr { border: 0; border-top: 1px dashed #000; margin: 5px 0; }
     .logo { display: block; margin: 0 auto 5px auto; }
+    h3#NamaUsaha { /* khusus Nama Usaha */
+      text-align: center;
+      font-size: 12px;
+      margin: 2px 0;
+      font-weight: bold;
+    }
     h3, p { text-align: center; margin: 2px 0; }
     .left { text-align: left; }
+    /* Agar pre dan span juga ikut font 10px */
+    pre, span, p, .left { font-size: 10px; }
   </style>
 </head>
 <body>
@@ -24,24 +39,19 @@
     <h3 id="NamaUsaha"></h3>
     <p id="AlamatUsaha"></p>
     <hr>
-
     <p class="left">Tanggal : <span id="Tanggal"></span></p>
     <p class="left">Kasir   : <span id="NamaPelanggan"></span></p>
     <p class="left">Metode  : <span id="MetodePembayaran"></span></p>
     <hr>
-
     <pre id="RincianCetak"></pre>
     <hr>
-
     <p class="left">TOTAL     : <span id="TotalTagihan"></span></p>
     <p class="left">DIBAYAR   : <span id="TotalPembayaran"></span></p>
     <p class="left">KEMBALIAN : <span id="Kembalian"></span></p>
     <hr>
-
     <p id="CatatanPenjualan"></p>
   </div>
   <script>
-    // Ambil data dari URL dan isi ke struk
     const p = new URLSearchParams(window.location.search);
     document.getElementById('LogoUsaha').src          = p.get('LogoUsaha')          || "";
     document.getElementById('NamaUsaha').innerText    = p.get('NamaUsaha')          || "";
