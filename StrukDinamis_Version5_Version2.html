@@ -7,21 +7,21 @@
     @page { size: 58mm auto; margin: 0; }
     body {
       font-family: Arial, sans-serif;
-      font-size: 10px;
+      font-size: 10px; /* default font untuk semua */
       margin: 0;
       padding: 0;
       background: #fff;
     }
     .content {
-      width: 100%;       /* diperbaiki supaya mengikuti lebar struk printer */
-      padding: 2px 3px;  /* dikurangi supaya teks kiri-kanan tidak kepotong */
+      max-width: 58mm;
       margin: 0 auto;
+      padding: 5px;
       background: #fff;
-      /* box-shadow bisa tetap atau dihapus */
+      box-shadow: 0 0 10px #eee;
     }
-    hr { border: 0; border-top: 1px dashed #000; margin: 3px 0; }
+    hr { border: 0; border-top: 1px dashed #000; margin: 5px 0; }
     .logo { display: block; margin: 0 auto 5px auto; }
-    h3#NamaUsaha {
+    h3#NamaUsaha { /* khusus Nama Usaha */
       text-align: center;
       font-size: 12px;
       margin: 2px 0;
@@ -29,11 +29,8 @@
     }
     h3, p { text-align: center; margin: 2px 0; }
     .left { text-align: left; }
-    pre, span, p, .left { 
-      font-size: 10px; 
-      white-space: pre-wrap;  /* teks panjang otomatis pindah baris */
-      word-wrap: break-word;
-    }
+    /* Agar pre dan span juga ikut font 10px */
+    pre, span, p, .left { font-size: 10px; }
   </style>
 </head>
 <body>
@@ -63,11 +60,4 @@
     document.getElementById('NamaPelanggan').innerText= p.get('NamaPelanggan')      || "";
     document.getElementById('MetodePembayaran').innerText = p.get('MetodePembayaran') || "";
     document.getElementById('RincianCetak').innerText = p.get('RincianCetak')       || "";
-    document.getElementById('TotalTagihan').innerText = p.get('TotalTagihan')       || "";
-    document.getElementById('TotalPembayaran').innerText = p.get('TotalPembayaran') || "";
-    document.getElementById('Kembalian').innerText    = p.get('Kembalian')          || "";
-    document.getElementById('CatatanPenjualan').innerText = p.get('CatatanPenjualan') || "";
-  </script>
-</body>
-</html>
-
+    docu
