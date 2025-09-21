@@ -2,58 +2,36 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Struk Transaksi</title>
+  <title>Struk Hybrid</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <style>
-    @page { size: 58mm auto; margin: 0; }
-    body {
-      font-family: Arial, sans-serif;
-      font-size: 12px;
-      margin: 0;
-      padding: 0;
-    }
-    .content { padding: 5px; }
-    hr { border: 0; border-top: 1px dashed #000; margin: 5px 0; }
-    .logo { display: block; margin: 0 auto 5px auto; }
-    h3, p { text-align: center; margin: 2px 0; }
-    .left { text-align: left; }
+    body { font-family: Arial; font-size:10px; margin:0; padding:5px; width:58mm; }
+    .struk { width:100%; padding:2px; }
+    h3,p { margin:2px 0; text-align:center; }
+    .left { text-align:left; }
+    pre { font-size:10px; white-space:pre-wrap; word-wrap:break-word; margin:2px 0; }
+    hr { border:0; border-top:1px dashed #000; margin:3px 0; }
+    .logo { display:block; margin:0 auto 5px auto; width:50px; }
   </style>
 </head>
 <body>
-  <div class="content">
-    <img class="logo" id="LogoUsaha" src="" alt="Logo Usaha" width="50" />
-    <h3 id="NamaUsaha"></h3>
-    <p id="AlamatUsaha"></p>
-    <hr>
-
-    <p class="left">Tanggal : <span id="Tanggal"></span></p>
-    <p class="left">Kasir   : <span id="NamaPelanggan"></span></p>
-    <p class="left">Metode  : <span id="MetodePembayaran"></span></p>
-    <hr>
-
-    <pre id="RincianCetak"></pre>
-    <hr>
-
-    <p class="left">TOTAL     : <span id="TotalTagihan"></span></p>
-    <p class="left">DIBAYAR   : <span id="TotalPembayaran"></span></p>
-    <p class="left">KEMBALIAN : <span id="Kembalian"></span></p>
-    <hr>
-
-    <p id="CatatanPenjualan"></p>
+  <div class="struk" id="struk">
+    {{STRUK_CONTENT}}
   </div>
+
   <script>
-    // Ambil data dari URL dan isi ke struk
-    const p = new URLSearchParams(window.location.search);
-    document.getElementById('LogoUsaha').src          = p.get('LogoUsaha')          || "";
-    document.getElementById('NamaUsaha').innerText    = p.get('NamaUsaha')          || "";
-    document.getElementById('AlamatUsaha').innerText  = p.get('AlamatUsaha')        || "";
-    document.getElementById('Tanggal').innerText      = p.get('Tanggal')            || "";
-    document.getElementById('NamaPelanggan').innerText= p.get('NamaPelanggan')      || "";
-    document.getElementById('MetodePembayaran').innerText = p.get('MetodePembayaran') || "";
-    document.getElementById('RincianCetak').innerText = p.get('RincianCetak')       || "";
-    document.getElementById('TotalTagihan').innerText = p.get('TotalTagihan')       || "";
-    document.getElementById('TotalPembayaran').innerText = p.get('TotalPembayaran') || "";
-    document.getElementById('Kembalian').innerText    = p.get('Kembalian')          || "";
-    document.getElementById('CatatanPenjualan').innerText = p.get('CatatanPenjualan') || "";
+    window.onload = function(){
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF({ unit:'mm', format:[58,2000] }); // tinggi besar supaya auto-fit
+      const strukDiv = document.getElementById('struk');
+
+      doc.html(strukDiv, {
+        x:0, y:0,
+        callback: function(pdf){
+          pdf.save("Struk.pdf"); // langsung download, tidak buka tab baru
+        }
+      });
+    }
   </script>
 </body>
 </html>
