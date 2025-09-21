@@ -5,23 +5,26 @@
   <title>Struk Transaksi</title>
   <style>
     @page { size: 58mm auto; margin: 0; }
+
     body {
       font-family: Arial, sans-serif;
-      font-size: 10px; /* default font untuk semua */
+      font-size: 10px;
       margin: 0;
       padding: 0;
       background: #fff;
     }
+
     .content {
-      width: 100%;       /* diperbaiki supaya teks tidak kepotong */
-      padding: 2px 3px;  /* dikurangi supaya pas kiri-kanan */
+      width: 100%;       /* teks tidak kepotong */
+      padding: 2px 3px;  /* pas kiri-kanan */
       margin: 0 auto;
       background: #fff;
       box-shadow: 0 0 10px #eee;
     }
+
     hr { border: 0; border-top: 1px dashed #000; margin: 5px 0; }
     .logo { display: block; margin: 0 auto 5px auto; }
-    h3#NamaUsaha { /* khusus Nama Usaha */
+    h3#NamaUsaha {
       text-align: center;
       font-size: 12px;
       margin: 2px 0;
@@ -29,11 +32,26 @@
     }
     h3, p { text-align: center; margin: 2px 0; }
     .left { text-align: left; }
-    /* Agar pre dan span juga ikut font 10px */
+
+    /* semua pre, span, p, left tetap 10px */
     pre, span, p, .left { 
       font-size: 10px; 
       white-space: pre-wrap;  /* teks panjang otomatis pindah baris */
       word-wrap: break-word;
+    }
+
+    /* pengaturan khusus saat print */
+    @media print {
+      body {
+        width: 58mm;  /* sesuai printer thermal */
+        margin: 0;
+      }
+      .content {
+        width: 100%;
+        padding: 2px 3px; /* pas kiri-kanan */
+        box-shadow: none; /* hilangkan shadow saat print */
+      }
+      hr { margin: 3px 0; }
     }
   </style>
 </head>
@@ -47,7 +65,7 @@
     <p class="left">Kasir   : <span id="NamaPelanggan"></span></p>
     <p class="left">Metode  : <span id="MetodePembayaran"></span></p>
     <hr>
-    <pre id="RincianCetak"></pre>
+    <pre id="RincianCetak"></pre> <!-- tetap sama, data aman -->
     <hr>
     <p class="left">TOTAL     : <span id="TotalTagihan"></span></p>
     <p class="left">DIBAYAR   : <span id="TotalPembayaran"></span></p>
@@ -55,6 +73,7 @@
     <hr>
     <p id="CatatanPenjualan"></p>
   </div>
+
   <script>
     const p = new URLSearchParams(window.location.search);
     document.getElementById('LogoUsaha').src          = p.get('LogoUsaha')          || "";
@@ -71,3 +90,4 @@
   </script>
 </body>
 </html>
+
