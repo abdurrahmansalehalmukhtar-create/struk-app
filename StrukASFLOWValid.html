@@ -12,6 +12,7 @@
     pre { font-size:10px; white-space:pre-wrap; word-wrap:break-word; margin:2px 0; }
     hr { border:0; border-top:1px dashed #000; margin:3px 0; }
     .logo { display:block; margin:0 auto 5px auto; width:50px; }
+    button { padding:5px 10px; font-size:12px; cursor:pointer; }
   </style>
 </head>
 <body>
@@ -52,7 +53,7 @@
     document.getElementById('Kembalian').innerText    = p.get('Kembalian') || "5.000";
     document.getElementById('CatatanPenjualan').innerText = p.get('CatatanPenjualan') || "Terima kasih atas kunjungan Anda!";
 
-    // Auto-generate PDF & auto print
+    // Auto-generate PDF & auto print (skrip lama, tetap utuh)
     window.onload = async function() {
       const { jsPDF } = window.jspdf;
       const doc = new jsPDF({ unit:'mm', format:[58,200] });
@@ -69,5 +70,42 @@
       });
     }
   </script>
+
+  <!-- Tambahan skrip baru untuk regenerate PDF / tombol print -->
+  <script>
+    async function regeneratePrintPDF(autoPrint = true) {
+      const { jsPDF } = window.jspdf;
+      const struk = document.getElementById('struk');
+
+      // Hitung tinggi konten struk
+      const rect = struk.getBoundingClientRect();
+      const contentHeightMM = rect.height * 0.264583; // px -> mm
+
+      const doc = new jsPDF({
+        unit: 'mm',
+        format: [58, contentHeightMM + 10] // lebar 58mm, tinggi sesuai isi + margin
+      });
+
+      await doc.html(struk, {
+        x: 0, y: 0, width: 58,
+        callback: function(pdf) {
+          const pdfBlob = pdf.output('bloburl'); // URL sementara
+          const printWindow = window.open(pdfBlob); // buka PDF baru
+          if (!printWindow) {
+            alert("Browser memblokir popup! Izinkan popup untuk melihat PDF.");
+          }
+          if (autoPrint) printWindow.print(); // langsung print jika autoPrint true
+        }
+      });
+    }
+
+    // Tambahkan tombol di halaman untuk regenerate PDF
+    const btn = document.createElement('button');
+    btn.innerText = "Regenerate / Print Struk";
+    btn.style.margin = "10px";
+    btn.onclick = () => regeneratePrintPDF(true); // auto print
+    document.body.appendChild(btn);
+  </script>
+
 </body>
 </html>
