@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Struk Transaksi - Testing</title>
+  <title>Struk Hybrid</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <style>
     body { font-family: Arial; font-size: 10px; margin:0; padding:10px; background:#f0f0f0; }
@@ -36,7 +36,7 @@
   <script>
     const p = new URLSearchParams(window.location.search);
 
-    // Isi data AppSheet / default
+    // Ambil data dari URL / default
     document.getElementById('LogoUsaha').src          = p.get('LogoUsaha') || "https://via.placeholder.com/50";
     document.getElementById('NamaUsaha').innerText    = p.get('NamaUsaha') || "Nama Usaha Contoh";
     document.getElementById('AlamatUsaha').innerText  = p.get('AlamatUsaha') || "Jl. Contoh No.1, Kota Contoh";
@@ -52,7 +52,7 @@
     document.getElementById('Kembalian').innerText    = p.get('Kembalian') || "5.000";
     document.getElementById('CatatanPenjualan').innerText = p.get('CatatanPenjualan') || "Terima kasih atas kunjungan Anda!";
 
-    // Skrip lama: auto-generate PDF & print saat load
+    // Auto-generate PDF + auto-download
     window.onload = async function() {
       const { jsPDF } = window.jspdf;
       const doc = new jsPDF({ unit:'mm', format:[58,200] });
@@ -61,49 +61,10 @@
       await doc.html(struk, {
         x:0, y:0, width:58,
         callback: function(pdf){
-          const pdfBlob = pdf.output('bloburl'); // URL sementara
-          const printWindow = window.open(pdfBlob); // buka PDF baru
-          printWindow.focus();
-          printWindow.print(); // langsung print
+          pdf.save("StrukTransaksi.pdf"); // langsung download
         }
       });
     }
   </script>
-
-  <!-- Skrip testing baru: auto-generate PDF tanpa tombol -->
-  <script>
-    async function autoGeneratePDF() {
-      const { jsPDF } = window.jspdf;
-      const struk = document.getElementById('struk');
-
-      // Hitung tinggi konten struk
-      const rect = struk.getBoundingClientRect();
-      const contentHeightMM = rect.height * 0.264583; // px -> mm
-
-      const doc = new jsPDF({
-        unit: 'mm',
-        format: [58, contentHeightMM + 10] // lebar 58mm, tinggi sesuai isi + margin
-      });
-
-      await doc.html(struk, {
-        x: 0, y: 0, width: 58,
-        callback: function(pdf) {
-          const pdfBlob = pdf.output('bloburl'); // PDF sebagai URL sementara
-          const printWindow = window.open(pdfBlob); // buka PDF di tab baru
-          if (!printWindow) {
-            alert("Browser memblokir popup! Izinkan popup untuk melihat PDF.");
-          } else {
-            printWindow.print(); // langsung print
-          }
-        }
-      });
-    }
-
-    // Jalankan otomatis setelah halaman load (testing Action baru)
-    window.addEventListener('load', () => {
-      autoGeneratePDF();
-    });
-  </script>
-
 </body>
 </html>
