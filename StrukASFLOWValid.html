@@ -3,20 +3,55 @@
 <head>
   <meta charset="UTF-8">
   <title>Struk Transaksi</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <style>
-    body { font-family: Arial; font-size: 10px; margin:0; padding:10px; background:#f0f0f0; }
-    .struk { width: 58mm; padding: 3px 5px; background: #fff; margin: 0 auto; }
-    h3, p { margin: 2px 0; text-align:center; }
-    .left { text-align:left; }
-    pre { font-size:10px; white-space:pre-wrap; word-wrap:break-word; margin:2px 0; }
-    hr { border:0; border-top:1px dashed #000; margin:3px 0; }
-    .logo { display:block; margin:0 auto 5px auto; width:50px; }
+    @page { size: 58mm auto; margin: 0; }
+    body {
+      font-family: Arial, sans-serif;
+      font-size: 10px; /* default font untuk semua */
+      margin: 0;
+      padding: 0;
+      background: #fff;
+    }
+    .content {
+      width: 100%;       /* diperbaiki supaya teks tidak kepotong */
+      padding: 2px 3px;  /* dikurangi supaya pas kiri-kanan */
+      margin: 0 auto;
+      background: #fff;
+      box-shadow: 0 0 10px #eee;
+    }
+    hr { border: 0; border-top: 1px dashed #000; margin: 5px 0; }
+    .logo { display: block; margin: 0 auto 5px auto; }
+    h3#NamaUsaha { /* khusus Nama Usaha */
+      text-align: center;
+      font-size: 12px;
+      margin: 2px 0;
+      font-weight: bold;
+    }
+    h3, p { text-align: center; margin: 2px 0; }
+    .left { text-align: left; }
+    pre, span, p, .left { 
+      font-size: 10px; 
+      white-space: pre-wrap;  /* teks panjang otomatis pindah baris */
+      word-wrap: break-word;
+    }
+
+    /* Tombol download PDF */
+    #linkDownloadPDF {
+      display: block;
+      text-align: center;
+      margin: 5px;
+      padding: 5px;
+      background: #4CAF50;
+      color: white;
+      text-decoration: none;
+      border-radius: 4px;
+      font-size: 10px;
+    }
   </style>
 </head>
 <body>
-  <div class="struk" id="struk">
-    <img class="logo" id="LogoUsaha" src="" alt="Logo Usaha">
+  <div class="content">
+    <img class="logo" id="LogoUsaha" src="" alt="Logo Usaha" width="50" />
     <h3 id="NamaUsaha"></h3>
     <p id="AlamatUsaha"></p>
     <hr>
@@ -33,42 +68,38 @@
     <p id="CatatanPenjualan"></p>
   </div>
 
+  <!-- Tombol Download / Print PDF -->
+  <a id="linkDownloadPDF" href="#">Download / Print PDF</a>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script>
     const p = new URLSearchParams(window.location.search);
+    document.getElementById('LogoUsaha').src          = p.get('LogoUsaha')          || "";
+    document.getElementById('NamaUsaha').innerText    = p.get('NamaUsaha')          || "";
+    document.getElementById('AlamatUsaha').innerText  = p.get('AlamatUsaha')        || "";
+    document.getElementById('Tanggal').innerText      = p.get('Tanggal')            || "";
+    document.getElementById('NamaPelanggan').innerText= p.get('NamaPelanggan')      || "";
+    document.getElementById('MetodePembayaran').innerText = p.get('MetodePembayaran') || "";
+    document.getElementById('RincianCetak').innerText = p.get('RincianCetak')       || "";
+    document.getElementById('TotalTagihan').innerText = p.get('TotalTagihan')       || "";
+    document.getElementById('TotalPembayaran').innerText = p.get('TotalPembayaran') || "";
+    document.getElementById('Kembalian').innerText    = p.get('Kembalian')          || "";
+    document.getElementById('CatatanPenjualan').innerText = p.get('CatatanPenjualan') || "";
 
-    // Isi data AppSheet / default
-    document.getElementById('LogoUsaha').src          = p.get('LogoUsaha') || "https://via.placeholder.com/50";
-    document.getElementById('NamaUsaha').innerText    = p.get('NamaUsaha') || "Nama Usaha Contoh";
-    document.getElementById('AlamatUsaha').innerText  = p.get('AlamatUsaha') || "Jl. Contoh No.1, Kota Contoh";
-    document.getElementById('Tanggal').innerText      = p.get('Tanggal') || "21/09/2025";
-    document.getElementById('NamaPelanggan').innerText= p.get('NamaPelanggan') || "Budi";
-    document.getElementById('MetodePembayaran').innerText = p.get('MetodePembayaran') || "Tunai";
-    document.getElementById('RincianCetak').innerText = p.get('RincianCetak') ||
-`1x Nasi Goreng - 25.000
-2x Ayam Goreng - 40.000
-3x Es Teh Manis - 15.000`;
-    document.getElementById('TotalTagihan').innerText = p.get('TotalTagihan') || "105.000";
-    document.getElementById('TotalPembayaran').innerText = p.get('TotalPembayaran') || "110.000";
-    document.getElementById('Kembalian').innerText    = p.get('Kembalian') || "5.000";
-    document.getElementById('CatatanPenjualan').innerText = p.get('CatatanPenjualan') || "Terima kasih atas kunjungan Anda!";
-
-    // Auto-generate PDF & langsung buka
-    window.onload = async function() {
+    // Tombol download PDF
+    const link = document.getElementById('linkDownloadPDF');
+    link.addEventListener('click', () => {
       const { jsPDF } = window.jspdf;
-      const doc = new jsPDF({ unit:'mm', format:[58,200] }); // lebar 58mm, panjang fleksibel
-      const struk = document.getElementById('struk');
-
-      await doc.html(struk, {
-        x:0, y:0, width:58,
+      const doc = new jsPDF({unit:'mm', format:[58, 200]}); // 58mm width
+      doc.html(document.querySelector('.content'), {
         callback: function(pdf){
-          const pdfBlob = pdf.output('bloburl'); // bikin URL sementara
-          window.location.href = pdfBlob; // langsung buka PDF di browser / APK thermal
-        }
+          pdf.save("Struk.pdf"); // otomatis download PDF
+        },
+        x:0,
+        y:0,
+        html2canvas: { scale: 0.5 }
       });
-    }
+    });
   </script>
 </body>
 </html>
-
-
-
