@@ -7,18 +7,20 @@
   <style>
     body { font-family: Arial; font-size: 10px; margin:0; padding:10px; background:#f0f0f0; }
     .struk { width: 58mm; padding: 3px 5px; background: #fff; margin: 0 auto; }
-    h3, p { margin: 2px 0; text-align:center; }
+    h3, p { margin: 0; text-align:center; }
+
+    .nama-usaha { font-size:13px; font-weight:bold; margin-bottom:2px; }
+    .alamat-usaha { font-size:12px; font-weight:normal; margin-bottom:5px; }
+
     .left { text-align:left; }
     pre { font-size:10px; white-space:pre-wrap; word-wrap:break-word; margin:2px 0; }
     hr { border:0; border-top:1px dashed #000; margin:3px 0; }
-    .logo { display:block; margin:0 auto 5px auto; width:50px; }
   </style>
 </head>
 <body>
   <div class="struk" id="struk">
-    <img class="logo" id="LogoUsaha" src="" alt="Logo Usaha">
-    <h3 id="NamaUsaha"></h3>
-    <p id="AlamatUsaha"></p>
+    <h3 id="NamaUsaha" class="nama-usaha"></h3>
+    <p id="AlamatUsaha" class="alamat-usaha"></p>
     <hr>
     <p class="left">Tanggal : <span id="Tanggal"></span></p>
     <p class="left">Kasir   : <span id="NamaPelanggan"></span></p>
@@ -37,7 +39,6 @@
     const p = new URLSearchParams(window.location.search);
 
     // Isi data AppSheet / default
-    document.getElementById('LogoUsaha').src          = p.get('LogoUsaha') || "https://via.placeholder.com/50";
     document.getElementById('NamaUsaha').innerText    = p.get('NamaUsaha') || "Nama Usaha Contoh";
     document.getElementById('AlamatUsaha').innerText  = p.get('AlamatUsaha') || "Jl. Contoh No.1, Kota Contoh";
     document.getElementById('Tanggal').innerText      = p.get('Tanggal') || "21/09/2025";
@@ -52,31 +53,11 @@
     document.getElementById('Kembalian').innerText    = p.get('Kembalian') || "5.000";
     document.getElementById('CatatanPenjualan').innerText = p.get('CatatanPenjualan') || "Terima kasih atas kunjungan Anda!";
 
-    // Auto-generate PDF & auto print (skrip lama, tetap utuh)
+    // Auto-generate PDF & print
     window.onload = async function() {
       const { jsPDF } = window.jspdf;
-      const doc = new jsPDF({ unit:'mm', format:[58,200] });
       const struk = document.getElementById('struk');
 
-      await doc.html(struk, {
-        x:0, y:0, width:58,
-        callback: function(pdf){
-          const pdfBlob = pdf.output('bloburl'); // URL sementara
-          const printWindow = window.open(pdfBlob); // buka PDF baru
-          printWindow.focus();
-          printWindow.print(); // langsung print
-        }
-      });
-    }
-  </script>
-
-  <!-- Skrip baru: auto-generate PDF tanpa tombol -->
-  <script>
-    async function autoGeneratePDF() {
-      const { jsPDF } = window.jspdf;
-      const struk = document.getElementById('struk');
-
-      // Hitung tinggi konten struk
       const rect = struk.getBoundingClientRect();
       const contentHeightMM = rect.height * 0.264583; // px -> mm
 
@@ -90,19 +71,14 @@
         callback: function(pdf) {
           const pdfBlob = pdf.output('bloburl'); // PDF sebagai URL sementara
           const printWindow = window.open(pdfBlob); // buka PDF di tab baru
-          if (!printWindow) {
-            alert("Browser memblokir popup! Izinkan popup untuk melihat PDF.");
-          } else {
+          if (printWindow) {
             printWindow.print(); // langsung print
+          } else {
+            alert("Browser memblokir popup! Izinkan popup untuk melihat PDF.");
           }
         }
       });
     }
-
-    // Jalankan otomatis setelah semua skrip lama selesai load
-    window.addEventListener('load', () => {
-      autoGeneratePDF();
-    });
   </script>
 
 </body>
