@@ -16,22 +16,4 @@
 </head>
 <body>
   <div class="struk" id="struk">
-    {{STRUK_CONTENT}}
-  </div>
-
-  <script>
-    window.onload = function(){
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF({ unit:'mm', format:[58,2000] }); // tinggi besar supaya auto-fit
-      const strukDiv = document.getElementById('struk');
-
-      doc.html(strukDiv, {
-        x:0, y:0,
-        callback: function(pdf){
-          pdf.save("Struk.pdf"); // langsung download, tidak buka tab baru
-        }
-      });
-    }
-  </script>
-</body>
-</html>
+    {
