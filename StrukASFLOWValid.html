@@ -7,21 +7,21 @@
     @page { size: 58mm auto; margin: 0; }
     body {
       font-family: Arial, sans-serif;
-      font-size: 10px; /* default font untuk semua */
+      font-size: 10px;
       margin: 0;
       padding: 0;
       background: #fff;
     }
     .content {
-      width: 100%;       /* diperbaiki supaya teks tidak kepotong */
-      padding: 2px 3px;  /* dikurangi supaya pas kiri-kanan */
+      width: 100%;
+      padding: 2px 3px;  /* kiri-kanan pas */
       margin: 0 auto;
       background: #fff;
       box-shadow: 0 0 10px #eee;
     }
     hr { border: 0; border-top: 1px dashed #000; margin: 5px 0; }
     .logo { display: block; margin: 0 auto 5px auto; }
-    h3#NamaUsaha { /* khusus Nama Usaha */
+    h3#NamaUsaha {
       text-align: center;
       font-size: 12px;
       margin: 2px 0;
@@ -29,10 +29,9 @@
     }
     h3, p { text-align: center; margin: 2px 0; }
     .left { text-align: left; }
-    /* Agar pre dan span juga ikut font 10px */
-    pre, span, p, .left { 
-      font-size: 10px; 
-      white-space: pre-wrap;  /* teks panjang otomatis pindah baris */
+    pre, span, p, .left {
+      font-size: 10px;
+      white-space: pre-wrap;   /* teks panjang virtual column pindah baris */
       word-wrap: break-word;
     }
   </style>
@@ -47,6 +46,7 @@
     <p class="left">Kasir   : <span id="NamaPelanggan"></span></p>
     <p class="left">Metode  : <span id="MetodePembayaran"></span></p>
     <hr>
+    <!-- Virtual column masuk di sini -->
     <pre id="RincianCetak"></pre>
     <hr>
     <p class="left">TOTAL     : <span id="TotalTagihan"></span></p>
@@ -57,13 +57,17 @@
   </div>
   <script>
     const p = new URLSearchParams(window.location.search);
+
     document.getElementById('LogoUsaha').src          = p.get('LogoUsaha')          || "";
     document.getElementById('NamaUsaha').innerText    = p.get('NamaUsaha')          || "";
     document.getElementById('AlamatUsaha').innerText  = p.get('AlamatUsaha')        || "";
     document.getElementById('Tanggal').innerText      = p.get('Tanggal')            || "";
     document.getElementById('NamaPelanggan').innerText= p.get('NamaPelanggan')      || "";
     document.getElementById('MetodePembayaran').innerText = p.get('MetodePembayaran') || "";
-    document.getElementById('RincianCetak').innerText = p.get('RincianCetak')       || "";
+
+    // Virtual column dimasukkan ke RincianCetak
+    document.getElementById('RincianCetak').innerText = p.get('VirtualKolom') || "";
+
     document.getElementById('TotalTagihan').innerText = p.get('TotalTagihan')       || "";
     document.getElementById('TotalPembayaran').innerText = p.get('TotalPembayaran') || "";
     document.getElementById('Kembalian').innerText    = p.get('Kembalian')          || "";
@@ -71,3 +75,4 @@
   </script>
 </body>
 </html>
+
