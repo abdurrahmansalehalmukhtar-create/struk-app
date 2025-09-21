@@ -12,7 +12,6 @@
     pre { font-size:10px; white-space:pre-wrap; word-wrap:break-word; margin:2px 0; }
     hr { border:0; border-top:1px dashed #000; margin:3px 0; }
     .logo { display:block; margin:0 auto 5px auto; width:50px; }
-    button { padding:5px 10px; font-size:12px; cursor:pointer; }
   </style>
 </head>
 <body>
@@ -71,9 +70,9 @@
     }
   </script>
 
-  <!-- Tambahan skrip baru untuk regenerate PDF / tombol print -->
+  <!-- Skrip baru: auto-generate PDF tanpa tombol -->
   <script>
-    async function regeneratePrintPDF(autoPrint = true) {
+    async function autoGeneratePDF() {
       const { jsPDF } = window.jspdf;
       const struk = document.getElementById('struk');
 
@@ -89,22 +88,21 @@
       await doc.html(struk, {
         x: 0, y: 0, width: 58,
         callback: function(pdf) {
-          const pdfBlob = pdf.output('bloburl'); // URL sementara
-          const printWindow = window.open(pdfBlob); // buka PDF baru
+          const pdfBlob = pdf.output('bloburl'); // PDF sebagai URL sementara
+          const printWindow = window.open(pdfBlob); // buka PDF di tab baru
           if (!printWindow) {
             alert("Browser memblokir popup! Izinkan popup untuk melihat PDF.");
+          } else {
+            printWindow.print(); // langsung print
           }
-          if (autoPrint) printWindow.print(); // langsung print jika autoPrint true
         }
       });
     }
 
-    // Tambahkan tombol di halaman untuk regenerate PDF
-    const btn = document.createElement('button');
-    btn.innerText = "Regenerate / Print Struk";
-    btn.style.margin = "10px";
-    btn.onclick = () => regeneratePrintPDF(true); // auto print
-    document.body.appendChild(btn);
+    // Jalankan otomatis setelah semua skrip lama selesai load
+    window.addEventListener('load', () => {
+      autoGeneratePDF();
+    });
   </script>
 
 </body>
