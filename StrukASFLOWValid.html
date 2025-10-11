@@ -15,6 +15,23 @@
     .left { text-align:left; }
     pre { font-size:10px; white-space:pre-wrap; word-wrap:break-word; margin:2px 0; }
     hr { border:0; border-top:1px dashed #000; margin:3px 0; }
+
+    /* ✅ Tambahan biar print-nya ukuran 58mm bukan A4 */
+    @page {
+      size: 58mm auto;
+      margin: 0;
+    }
+
+    @media print {
+      body {
+        margin: 0;
+        background: white;
+      }
+      .struk {
+        width: 58mm;
+        margin: 0 auto;
+      }
+    }
   </style>
 </head>
 <body>
